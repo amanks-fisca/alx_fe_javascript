@@ -71,6 +71,11 @@
     <button id="newQuote">Show New Quote</button>
   </div>
 
+  <div style="text-align: center; margin-top: 2rem;">
+  <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+  <button onclick="exportToJsonFile()">Export Quotes</button>
+</div>
+
   <div id="formContainer">
     <!-- JavaScript will insert form here -->
   </div>
