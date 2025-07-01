@@ -62,6 +62,13 @@
 <body>
 
   <h1>Dynamic Quote Generator</h1>
+ <div style="text-align: center; margin-bottom: 1.5rem;">
+  <label for="categoryFilter"><strong>Filter by Category:</strong></label>
+  <select id="categoryFilter" onchange="filterQuotes()">
+    <option value="all">All Categories</option>
+    <!-- Categories will be dynamically populated -->
+  </select>
+</div>
 
   <div id="quoteDisplay" aria-live="polite">
     <!-- JavaScript will insert quotes here -->
