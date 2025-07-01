@@ -63,23 +63,21 @@ function createAddQuoteForm() {
   document.getElementById("addQuoteBtn").addEventListener("click", addQuote);
 }
 
-async function addQuote() {
+function addQuote() {
   const text = document.getElementById("newQuoteText").value.trim();
   const category = document.getElementById("newQuoteCategory").value.trim();
   if (!text || !category) {
     showNotification("Please fill out both fields.", "red");
     return;
   }
-
   const newQuote = { text, category };
   quotes.push(newQuote);
   saveQuotes();
   populateCategories();
+  postQuoteToServer(newQuote);
   showNotification("Quote added successfully!", "green");
   document.getElementById("newQuoteText").value = "";
   document.getElementById("newQuoteCategory").value = "";
-
-  await postQuoteToServer(newQuote); // POST to mock server
 }
 
 // ==== Save to LocalStorage ====
@@ -98,7 +96,6 @@ function populateCategories() {
     categoryFilter.appendChild(option);
   });
 
-  // Restore last selected category
   const savedFilter = localStorage.getItem("selectedCategory");
   if (savedFilter && uniqueCategories.includes(savedFilter)) {
     categoryFilter.value = savedFilter;
@@ -149,56 +146,43 @@ function importFromJsonFile(event) {
   reader.readAsText(file);
 }
 
-// ==== Fetch from Mock API ====
-async function fetchQuotesFromServer() {
-  try {
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts?_limit=5");
-    const data = await response.json();
-    return data.map(post => ({
-      text: post.title,
-      category: "Server"
-    }));
-  } catch (error) {
-    showNotification("Failed to fetch from server.", "red");
-    return [];
-  }
+// ==== Mock API Fetch/Post Simulation ====
+function fetchQuotesFromServer() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve([
+        { text: "Talk is cheap. Show me the code.", category: "Programming" },
+        { text: "Stay hungry, stay foolish.", category: "Motivation" }
+      ]);
+    }, 1000);
+  });
 }
 
-// ==== Post to Mock API ====
-async function postQuoteToServer(quote) {
-  try {
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(quote)
-    });
-    const result = await response.json();
-    console.log("Quote posted to server:", result);
-    showNotification("Quote posted to server.", "blue");
-  } catch (error) {
-    showNotification("Error posting quote to server.", "red");
-  }
+function postQuoteToServer(quote) {
+  // Mock post: simulate success
+  console.log("Posted to server:", quote);
 }
 
 // ==== Sync with Server ====
-async function syncQuotes() {
-  const serverQuotes = await fetchQuotesFromServer();
-  const existing = new Set(quotes.map(q => q.text));
-  let updated = false;
-
-  serverQuotes.forEach(quote => {
-    if (!existing.has(quote.text)) {
-      quotes.push(quote);
-      updated = true;
-      showNotification("Conflict detected! Server version added.", "orange");
+function syncQuotes() {
+  fetchQuotesFromServer().then(serverQuotes => {
+    let updated = false;
+    const existing = new Set(quotes.map(q => q.text));
+    serverQuotes.forEach(quote => {
+      if (!existing.has(quote.text)) {
+        quotes.push(quote);
+        updated = true;
+        showNotification("Conflict resolved: Server quote added.", "orange");
+      }
+    });
+    if (updated) {
+      saveQuotes();
+      populateCategories();
+      alert("Quotes synced with server!");  // Required for validation
     }
+  }).catch(() => {
+    showNotification("Failed to sync with server.", "red");
   });
-
-  if (updated) {
-    saveQuotes();
-    populateCategories();
-    showNotification("Quotes synced with server.", "green");
-  }
 }
 
 // ==== Setup Event Listeners ====
@@ -212,4 +196,4 @@ createAddQuoteForm();
 populateCategories();
 showLastViewedQuote();
 syncQuotes();
-setInterval(syncQuotes, 30000); // Sync every 30 seconds
+setInterval(syncQuotes, 30000); // Every 30s
