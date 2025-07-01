@@ -8,38 +8,72 @@
     body {
       font-family: Arial, sans-serif;
       padding: 2rem;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #444;
     }
     #quoteDisplay {
-      margin: 2rem 0;
-      font-size: 1.5rem;
-      font-style: italic;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      max-width: 600px;
+      background-color: #fff;
+      border-left: 5px solid #007BFF;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-    .form-group {
+    blockquote {
+      font-size: 1.2rem;
       margin-bottom: 1rem;
     }
-    input, button {
-      padding: 0.5rem;
+    em {
+      color: #555;
+    }
+    button {
+      padding: 0.6rem 1.2rem;
       font-size: 1rem;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #formContainer {
+      margin-top: 3rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #formContainer input {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
     }
   </style>
 </head>
 <body>
+
   <h1>Dynamic Quote Generator</h1>
 
-  <label for="categorySelect">Choose a category:</label>
-  <select id="categorySelect"></select>
-
-  <div id="quoteDisplay">Click the button to see a quote.</div>
-  <button id="newQuote">Show New Quote</button>
-
-  <h2>Add a New Quote</h2>
-  <div class="form-group">
-    <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
+  <div id="quoteDisplay" aria-live="polite">
+    <!-- JavaScript will insert quotes here -->
   </div>
-  <div class="form-group">
-    <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
+
+  <div style="text-align: center;">
+    <button id="newQuote">Show New Quote</button>
   </div>
-  <button id="addQuoteBtn">Add Quote</button>
+
+  <div id="formContainer">
+    <!-- JavaScript will insert form here -->
+  </div>
 
   <script src="script.js"></script>
 </body>
