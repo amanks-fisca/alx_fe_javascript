@@ -198,6 +198,7 @@ async function syncQuotes() {
     saveQuotes();
     populateCategories();
     showNotification("Quotes synced with server.", "green");
+      alert("Quotes synced with server!");
   }
 }
 
